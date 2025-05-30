@@ -1,76 +1,73 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+
 class Proyecto:
     def __init__(self, titulo, descripcion, tecnologias, tipo, enlace=None):
         self.titulo = titulo
         self.descripcion = descripcion
         self.tecnologias = tecnologias
-        self.tipo = tipo  # "Personal" o "Institucional"
+        self.tipo = tipo
         self.enlace = enlace
 
-    def mostrar(self):
-        print(f"🧩 {self.titulo} ({self.tipo})")
-        print(f"   Descripción: {self.descripcion}")
-        print(f"   Tecnologías: {', '.join(self.tecnologias)}")
-        if self.enlace:
-            print(f"   Enlace: {self.enlace}")
-        print()
 
+class PortafolioApp:
+    def __init__(self, root, perfil):
+        self.root = root
+        self.perfil = perfil
+        self.root.title("Portafolio de Proyectos")
+        self.crear_interfaz()
 
-class Perfil:
-    def __init__(self, nombre, descripcion, correo, proyectos=[]):
-        self.nombre = nombre
-        self.descripcion = descripcion
-        self.correo = correo
-        self.proyectos = proyectos
+    def crear_interfaz(self):
+        # Info general del perfil
+        tk.Label(self.root, text=f"👤 {self.perfil['nombre']}", font=("Helvetica", 16, "bold")).pack(pady=5)
+        tk.Label(self.root, text=f"📧 {self.perfil['correo']}", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text=f"📝 {self.perfil['descripcion']}", font=("Helvetica", 12), wraplength=600).pack(pady=5)
 
-    def agregar_proyecto(self, proyecto):
-        self.proyectos.append(proyecto)
+        # Pestañas para proyectos
+        notebook = ttk.Notebook(self.root)
+        notebook.pack(expand=1, fill="both")
 
-    def mostrar_portafolio(self):
-        print(f"👤 Nombre: {self.nombre}")
-        print(f"📧 Correo: {self.correo}")
-        print(f"📝 Descripción: {self.descripcion}\n")
-        print("📂 Proyectos:\n")
+        frame_personales = ttk.Frame(notebook)
+        frame_institucionales = ttk.Frame(notebook)
 
-        personales = [p for p in self.proyectos if p.tipo == "Personal"]
-        institucionales = [p for p in self.proyectos if p.tipo == "Institucional"]
+        notebook.add(frame_personales, text="🔷 Personales")
+        notebook.add(frame_institucionales, text="🔶 Institucionales")
 
-        print("🔷 Proyectos Personales:")
-        for p in personales:
-            p.mostrar()
+        # Añadir proyectos
+        for proyecto in self.perfil['proyectos']:
+            frame = frame_personales if proyecto.tipo == "Personal" else frame_institucionales
+            self.agregar_proyecto_a_frame(proyecto, frame)
 
-        print("🔶 Proyectos Institucionales:")
-        for p in institucionales:
-            p.mostrar()
+    def agregar_proyecto_a_frame(self, proyecto, frame):
+        contenedor = ttk.LabelFrame(frame, text=proyecto.titulo, padding=10)
+        contenedor.pack(fill="x", pady=5, padx=10)
+
+        ttk.Label(contenedor, text=f"📄 Descripción: {proyecto.descripcion}", wraplength=500).pack(anchor="w")
+        ttk.Label(contenedor, text=f"🛠 Tecnologías: {', '.join(proyecto.tecnologias)}").pack(anchor="w")
+        if proyecto.enlace:
+            ttk.Label(contenedor, text=f"🔗 Enlace: {proyecto.enlace}", foreground="blue").pack(anchor="w")
 
 
 # Ejemplo de uso
 if __name__ == "__main__":
-    perfil = Perfil(
-        nombre="Juan Pérez",
-        descripcion="Desarrollador Full Stack con experiencia en aplicaciones web y móviles.",
-        correo="juan.perez@example.com"
-    )
+    perfil = {
+        "nombre": "Juan Pérez",
+        "correo": "juan.perez@example.com",
+        "descripcion": "Desarrollador Full Stack con experiencia en aplicaciones web y móviles.",
+        "proyectos": [
+            Proyecto("Gestor de Tareas Web", "App de tareas con panel de usuario.",
+                     ["Python", "Flask", "SQLite"], "Personal",
+                     "https://github.com/juanperez/gestor-tareas"),
 
-    perfil.agregar_proyecto(Proyecto(
-        titulo="Gestor de Tareas Web",
-        descripcion="Aplicación para gestión de tareas con autenticación y panel de usuario.",
-        tecnologias=["Python", "Flask", "SQLite"],
-        tipo="Personal",
-        enlace="https://github.com/juanperez/gestor-tareas"
-    ))
+            Proyecto("Sistema de Control Escolar", "Sistema para notas y asistencia.",
+                     ["Laravel", "MySQL", "Vue.js"], "Institucional"),
 
-    perfil.agregar_proyecto(Proyecto(
-        titulo="Sistema de Control Escolar",
-        descripcion="Sistema institucional para manejo de calificaciones, asistencias y reportes.",
-        tecnologias=["Laravel", "MySQL", "Vue.js"],
-        tipo="Institucional"
-    ))
+            Proyecto("Web Lavandería Fuente Azul", "Sitio WordPress con blog y contacto.",
+                     ["WordPress", "PHP", "HTML"], "Institucional")
+        ]
+    }
 
-    perfil.agregar_proyecto(Proyecto(
-        titulo="Sitio web para Lavandería Fuente Azul",
-        descripcion="Sitio WordPress con mapa, formulario de contacto y blog.",
-        tecnologias=["WordPress", "PHP", "HTML", "CSS"],
-        tipo="Institucional"
-    ))
-
-    perfil.mostrar_portafolio()
+    root = tk.Tk()
+    app = PortafolioApp(root, perfil)
+    root.mainloop()
