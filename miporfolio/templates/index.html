@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Portafolio de {{ perfil.nombre }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; }
+        h1 { color: #2c3e50; }
+        .perfil { margin-bottom: 30px; }
+        .proyecto { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 0 8px #ccc; }
+        .tipo { font-weight: bold; color: #2980b9; }
+        .personal { border-left: 5px solid #3498db; }
+        .institucional { border-left: 5px solid #e67e22; }
+    </style>
+</head>
+<body>
+    <div class="perfil">
+        <h1>{{ perfil.nombre }}</h1>
+        <p><strong>Email:</strong> {{ perfil.correo }}</p>
+        <p><strong>Descripción:</strong> {{ perfil.descripcion }}</p>
+    </div>
+
+    <h2>📂 Proyectos</h2>
+
+    {% for proyecto in perfil.proyectos %}
+        <div class="proyecto {{ 'personal' if proyecto.tipo == 'Personal' else 'institucional' }}">
+            <h3>{{ proyecto.titulo }}</h3>
+            <p><span class="tipo">{{ proyecto.tipo }}</span></p>
+            <p>{{ proyecto.descripcion }}</p>
+            <p><strong>Tecnologías:</strong> {{ proyecto.tecnologias | join(', ') }}</p>
+            {% if proyecto.enlace %}
+                <p><a href="{{ proyecto.enlace }}" target="_blank">🔗 Ver proyecto</a></p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>
