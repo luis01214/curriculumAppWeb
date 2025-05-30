@@ -2,16 +2,16 @@ import streamlit as st
 
 # Datos del portafolio
 perfil = {
-    "nombre": "Juan Pérez",
-    "correo": "juan.perez@example.com",
-    "descripcion": "Desarrollador Full Stack con experiencia en aplicaciones web y móviles.",
+    "nombre": "Luis Eduardo Garcia Velasco",
+    "correo": "luisdduardogv8@gmail.com",
+    "descripcion": "Desarrollador web con experiencia en Python, JavaScript y PHP. Me apasiona crear aplicaciones eficientes y escalables.",
     "proyectos": [
         {
             "titulo": "Gestor de Tareas Web",
             "descripcion": "App de tareas con panel de usuario.",
             "tecnologias": ["Python", "Flask", "SQLite"],
             "tipo": "Personal",
-            "enlace": "https://github.com/juanperez/gestor-tareas"
+            "enlace": " "
         },
         {
             "titulo": "Sistema de Control Escolar",
